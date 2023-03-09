@@ -1,4 +1,6 @@
-const { Job } = require('../models/index')
+const { Job, User, Profile, UserJob } = require('../models/index')
+const bcrypt = require('bcryptjs');
+const { Op } = require("sequelize");
 
 class Controller {
     static home(req, res) {
@@ -6,10 +8,103 @@ class Controller {
     }
 
     static job(req, res) {
+        const { title, location, category } = req.query
+        let options = {}
+        if (title, location, category) {
+            options = {
+                where: {
+                    title: {
+                        [Op.iLike]: `%${title}%`
+                    },
+                    location: {
+                        [Op.iLike]: `%${location}%`
+                    },
+                    category: {
+                        [Op.iLike]: `%${category}%`
+                    }
+                }
+            }
+        }
+        if (title) {
+            options = {
+                where: {
+                    title: {
+                        [Op.iLike]: `%${title}%`
+                    }
+                }
+            }
+        }
+        if (location) {
+            options = {
+                where: {
+                    location: {
+                        [Op.iLike]: `%${location}%`
+                    }
+                }
+            }
+        }
+        if (category) {
+            options = {
+                where: {
+                    category: {
+                        [Op.iLike]: `%${category}%`
+                    }
+                }
+            }
+        }
+        if (title, location) {
+            options = {
+                where: {
+                    title: {
+                        [Op.iLike]: `%${title}%`
+                    },
+                    location: {
+                        [Op.iLike]: `%${location}%`
+                    }
+                }
+            }
+        }
+        if (title, category) {
+            options = {
+                where: {
+                    title: {
+                        [Op.iLike]: `%${title}%`
+                    },
+                    category: {
+                        [Op.iLike]: `%${category}%`
+                    }
+                }
+            }
+        }
+        if (location, category) {
+            options = {
+                where: {
+                    title: {
+                        [Op.iLike]: `%${title}%`
+                    },
+                    location: {
+                        [Op.iLike]: `%${location}%`
+                    },
+                    category: {
+                        [Op.iLike]: `%${category}%`
+                    }
+                }
+            }
+        }
+        let dataJob;
         Job
-            .findAll()
+            .findAll(options)
             .then((data) => {
-                res.render('job', { data })
+                dataJob = data
+                const userId = req.session.UserId
+                return UserJob.findAll({
+                    where: {
+                        UserId: userId
+                    }
+                })
+            })
+            .then((dataUserJob) => {
+                res.render('job', { data: dataJob, dataUserJob })
             })
             .catch((err) => {
                 res.send(err)
@@ -17,11 +112,124 @@ class Controller {
     }
 
     static login(req, res) {
+        const { error } = req.query
+        res.render('login', { error })
+    }
 
+    static loginHandler(req, res) {
+        const { username, password } = req.body
+        User.findOne({ where: { username } })
+            .then((user) => {
+                if (user) {
+                    const isValidPassword = bcrypt.compareSync(password, user.password)
+                    if (isValidPassword) {
+                        req.session.UserId = user.id
+                        return res.redirect('/')
+                    } else {
+                        const error = 'Invalid Username/Password'
+                        return res.redirect(`/login?error=${error}`)
+                    }
+                } else {
+                    const error = 'Invalid Username/Password'
+                    return res.redirect(`/login?error=${error}`)
+                }
+            })
+            .catch((err) => {
+                res.send(err)
+            })
     }
 
     static register(req, res) {
         res.render('register')
+    }
+
+    static registerHandler(req, res) {
+        const { username, email, password } = req.body
+        User.create({ username, email, password })
+            .then(() => {
+                res.redirect('/login')
+            })
+            .catch((err) => {
+                res.send(err)
+            })
+    }
+    static getProfile(req, res) {
+        const { id } = req.params
+        Profile.findByPk(id)
+            .then((data) => {
+                res.render('profile', { data })
+            })
+            .catch((err) => {
+                res.send(data)
+            })
+    }
+
+    static addProfileRender(req, res) {
+        User.findOne({
+            where: {
+                id: req.session.UserId
+            }
+        })
+            .then((data) => {
+                res.render('addProfile', { data })
+            })
+            .catch((err) => {
+                res.send(err)
+            })
+    }
+
+    static addProfileHandler(req, res) {
+        const { id } = req.params
+        const { name, gender, age, phone, location } = req.body
+        Profile.create({ name, gender, age, phone, location, UserId: req.session.UserId }, {
+            where: { id }
+        })
+            .then(() => {
+                res.redirect(`/`)
+            })
+            .catch((err) => {
+                res.send(err)
+            })
+    }
+
+    static editProfileRender(req, res) {
+        const { id } = req.session.UserId
+
+        Profile.findByPk(id)
+            .then((data) => {
+                res.render('editProfile', { data })
+            })
+            .catch((err) => {
+                res.send(err)
+            })
+    }
+    static apply(req, res) {
+        const { id } = req.params
+
+        UserJob.findOne({
+            where: {
+                JobId: id
+            }
+        })
+            .then((data) => {
+                UserJob.create({ JobId: id, UserId: req.session.UserId })
+                res.redirect('/jobs')
+            })
+            //   .then(()=> {
+            //   })
+            .catch((err) => {
+                res.send(err)
+            })
+    }
+    static logout(req, res) {
+        req.session.destroy((err) => {
+            if (err) {
+                res.send(err)
+            }
+            else {
+                res.redirect('/')
+            }
+        })
     }
 }
 

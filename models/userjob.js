@@ -11,7 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      UserJob.belongsTo(models.Job)
+      UserJob.belongsTo(models.User)
     }
+
+    static appliedDate(){}
   }
   UserJob.init({
     JobId: DataTypes.INTEGER,

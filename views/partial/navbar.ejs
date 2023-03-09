@@ -16,25 +16,25 @@
                     </div>
                 </div>
                 <div class="container">
-                    <form action="">
+                    <form action="/jobs?search=" method="get">
                     <div class="row bg-white shadow mt-n5 border-radius-lg pb-4 p-3 mx-sm-0 mx-1 position-relative">
                         <div class="col-lg-3 mt-2">
                             <div class="input-group">
-                                <input class="form-control" placeholder="Job title" aria-label="Search for" type="text">
+                                <input class="form-control" placeholder="Job title" aria-label="Search for" type="text" name="title">
                             </div>
                         </div>
                         <div class="col-lg-3 mt-2">
                             <div class="input-group">
-                                <input class="form-control" placeholder="Location" aria-label="Location in" type="text">
+                                <input class="form-control" placeholder="Location" aria-label="Location in" type="text" name="location">
                             </div>
                         </div>
                         <div class="col-lg-3 mt-2">
                             <div class="input-group">
-                                <input class="form-control" placeholder="Category" aria-label="Category" type="text">
+                                <input class="form-control" placeholder="Category" aria-label="Category" type="text" name="category">
                             </div>
                         </div>
                         <div class="col-lg-3 mt-2">
-                            <button type="button" class="btn bg-gradient-success w-100 mb-0">Search</button>
+                            <button type="submit" class="btn bg-gradient-success w-100 mb-0">Search</button>
                         </div>
                     </div>
                 </form>
