@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Job</title>
+</head>
+<body>
+    <%- include('partial/navbar'); %>
+    <table border="1">
+        <tr>
+            <th>Title</th>
+            <th>Company</th>
+            <th>Location</th>
+            <th>Requirement</th>
+            <th>Created Date</th>
+        </tr>
+        <% data.forEach(el => { %>
+            <tr>
+                <td><%=el.title%></td>
+                <td><%=el.companyName %></td>
+                <td><%=el.location%></td>
+                <td><%=el.requirement %></td>
+                <td><%=el.createdAt %></td>
+            </tr>
+        <% }) %>
+    </table>
+</body>
+</html>

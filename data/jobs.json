@@ -1,0 +1,38 @@
+[
+    {
+        "title" : "Fullstack Developer",
+        "vacancy" : 5,
+        "requirement" : "Menguasai seluruh bahasa pemrograman, experience 5 tahun, mampu bekerja dibawah tekanan",
+        "companyName": "Goto",
+        "location": "Jakarta",
+        "category":"Teknologi"
+    },{
+        "title" : "QA Enginer",
+        "vacancy" : 10,
+        "requirement" : "Menguasai seluruh bahasa pemrograman, experience 5 tahun, mampu bekerja dibawah tekanan",
+        "companyName": "Catalys",
+        "location": "Jakarta",
+        "category":"Teknologi"
+    },{
+        "title" : "IT Support",
+        "vacancy" : 2,
+        "requirement" : "Menguasai seluruh bahasa pemrograman, minimal 3 tahun, mampu bekerja dibawah tekanan",
+        "companyName": "Indomarco",
+        "location": "Jakarta",
+        "category":"Teknologi"
+    },{
+        "title" : "Manager Production",
+        "vacancy" : 5,
+        "requirement" : "Menguasai seluruh bahasa pemrograman, experience 5 tahun, mampu bekerja dibawah tekanan",
+        "companyName": "Indofood",
+        "location": "Jakarta",
+        "category":"Manufactur"
+    },{
+        "title" : "Quality Ansurance",
+        "vacancy" : 5,
+        "requirement" : "Experience minimal 2 tahun, pendidikan s1, mampu bekerja dibawah tekanan",
+        "companyName": "Flip",
+        "location": "Bandung",
+        "category":"Layanan Kesehatan"
+    }
+]

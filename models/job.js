@@ -11,13 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Job.belongsToMany(models.User, { through: models.UserJob });
     }
   }
   Job.init({
     title: DataTypes.STRING,
-    vacancy: DataTypes.STRING,
-    requirement: DataTypes.TEXT,
-    companyName: DataTypes.STRING
+    vacancy: DataTypes.INTEGER,
+    category: DataTypes.STRING,
+    companyName: DataTypes.STRING,
+    location: DataTypes.STRING,
+    requirement: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'Job',
