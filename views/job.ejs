@@ -13,67 +13,95 @@
     </style>
   </head>
   <body>
-    <%- include('partial/navbar'); %>
-    <table border="1">
-      <tr>
-        <th>Title</th>
-        <th>Company</th>
-        <th>Location</th>
-        <th>Requirement</th>
-        <th>Created Date</th>
-      </tr>
-      <% data.forEach(el => { %>
-      <tr>
-        <td><%=el.title%></td>
-        <td><%=el.companyName %></td>
-        <td><%=el.location%></td>
-        <td><%=el.requirement %></td>
-        <td><%=el.createdAt %></td>
-      </tr>
-      <% }) %>
-    </table>
-
-    <div style="display: flex">
-      <div>
-        <ul>
-          <% data.forEach((el,i,data) => { %>
-          <div>
-            <li>
-              <div class="card">
-                <div class="content">
-                  <a href="#">
-                    <span class="title"><%=el.title %></span>
-                  </a>
-                  <p class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae dolores, possimus pariatur animi temporibus nesciunt praesentium</p>
-                  <button onclick="showDescription(<%=i%>)">
-                    Find out more
-                    <span aria-hidden="true"> → </span>
-                  </button>
-                </div>
-              </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+      <div class="container">
+        <a href="javascript:;" class="btn btn-sm bg-gradient-dark mb-0 me-auto d-lg-none d-block">Sign IN</a>
+        <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon mt-2">
+            <span class="navbar-toggler-bar bar1"></span>
+            <span class="navbar-toggler-bar bar2"></span>
+            <span class="navbar-toggler-bar bar3"></span>
+          </span>
+        </button>
+        <div class="collapse navbar-collapse w-100 pt-3 pb-2 py-lg-0" id="navigation">
+          <ul class="navbar-nav navbar-nav-hover">
+            <li class="nav-item mx-2">
+              <a class="nav-link ps-2 d-flex justify-content-between text-dark cursor-pointer align-items-center" role="button" href="/"> Home </a>
             </li>
+            <li class="nav-item dropdown mx-2">
+              <% if (dataUser.hasProfile === true) { %>
+                <a class="nav-link ps-2 d-flex justify-content-between text-dark cursor-pointer align-items-center" role="button" href="/profile/<%= dataUser.id %>"> Account </a>
+              <% } else { %>
+                <a class="nav-link ps-2 d-flex justify-content-between text-dark cursor-pointer align-items-center" role="button" href="/profile/add"> Account </a>
+                <% } %>
+            </li>
+          </ul>
+          <a class="navbar-brand font-weight-bold mx-auto" href="/jobs" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom">JOB PORTAL</a>
+          <ul class="navbar-nav navbar-nav-hover">
+            <li class="nav-item dropdown mx-2">
+              <a class="nav-link ps-2 d-flex justify-content-between text-dark cursor-pointer align-items-center" role="button" href="/logout">
+                Logout
+                <i class="fa text-xs text-secondary ms-2 fa-arrow-right" aria-hidden="true"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <%- include('partial/navbar'); %>
+    <div style="display: flex; margin: 2vh">
+      <div style="max-width: 30%; padding-right: 2px; height: 100vh" class="scroll">
+        <div style="height: 100%; overflow: auto">
+          <ul>
+            <% data.forEach((el,i,data) => { %>
+            <div style="margin: 2vh; border: 2rem">
+              <li>
+                <div class="card">
+                  <div class="content">
+                    <a href="#">
+                      <span class="title"><%=el.title %></span>
+                    </a>
+                    <p class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae dolores, possimus pariatur animi temporibus nesciunt praesentium</p>
+                    <button onclick="showDescription(<%=i%>)">
+                      Find out more
+                      <span aria-hidden="true"> → </span>
+                    </button>
+                  </div>
+                </div>
+              </li>
+            </div>
+            <% }) %>
+          </ul>
+        </div>
+      </div>
+      <div style="width: 100%; padding: 20px; margin: 20px; margin-right: 10vh">
+        <div class="description" style="width: 100%; height: 100%; padding: 20px; margin: 20px">
+          <% data.forEach(el => { %>
+          <div class="descripsi">
+            <h1><%=el.title %></h1>
+            <h4>PT. <%=el.companyName %></h4>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit deserunt similique minus sed totam eaque expedita mollitia distinctio magnam delectus, sit recusandae officiis dolorum provident hic molestiae eos aspernatur.
+              Voluptatibus beatae assumenda at ullam dolorum, odio vitae recusandae, in, eum id cumque. Eos, et iusto labore explicabo sunt sint doloribus.
+            </p>
+            <h4>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eveniet blanditiis error tempora, perspiciatis corporis odit neque! Nisi in, illum hic totam laudantium atque molestias, eum sit optio eveniet sequi quidem?</h4>
+            <br />
+            <h5>Kualifikasi</h5>
+            <pre style="font-size: large"> <%=el.requirement.replace(',','\n').replace(',','\n') %></pre>
+            <h5><%=el.location %></h5>
+            <% const find = dataUserJob.find((el2) => el2.JobId === el.id) %> <% if (find) { %>
+            <p>you have already applied to this job</p>
+            <% } else { %>
+            <form action="/jobs/<%= el.id %>/apply" method="post">
+              <button type="submit" style="width: 20vh">Apply</button>
+            </form>
+            <% }%>
           </div>
           <% }) %>
-        </ul>
-      </div>
-      <div class="description">
-        <% data.forEach(el => { %>
-        <div class="descripsi">
-          <h1><%=el.title %></h1>
-          <h4>PT. <%=el.companyName %></h4>
-          <h4>PT. <%=el.requirement %></h4>
-          <% const find = dataUserJob.find((el2) => el2.JobId === el.id)  %>
-            <% if (find) { %>
-                <p>you have already applied to this job</p>
-                <% } else { %>
-                    <form action="/jobs/<%= el.id %>/apply" method="post">
-                        <button type="submit">Apply</button>
-                    </form>
-               <% }%>
         </div>
-        <% }) %>
       </div>
     </div>
+    <%- include('partial/footer'); %>
   </body>
   <script>
     function showDescription(index, data) {
@@ -83,9 +111,7 @@
           descripsi[i].style.display = 'none';
         }
       }
-
       descripsi[index].style.display = 'block';
     }
   </script>
 </html>
-

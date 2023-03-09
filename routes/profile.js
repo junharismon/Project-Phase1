@@ -4,6 +4,6 @@ const router = express.Router()
 
 router.get('/add', Controller.addProfileRender)
 router.post('/add/:id', Controller.addProfileHandler)
-
+router.get('/delete/:id', Controller.delete)
 router.get('/:id', Controller.getProfile)
 module.exports = router

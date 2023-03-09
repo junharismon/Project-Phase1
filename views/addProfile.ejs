@@ -1,19 +1,18 @@
-<link rel="stylesheet" href="../css/style/register.css">
-<div class="form-box">
+<link rel="stylesheet" href="../css/style/register.css" />
+<body style="background-color: rgba(0, 0, 0, 0.3)">
+  <div class="form-box" style="position: absolute; left: 40%; top: 5%">
     <form class="form" method="post" action="/profile/add/<%= data.id %>">
-        <span class="title">Add Your Profile</span>
-        <span class="subtitle">So that Companies can know you better!</span>
-        <div class="form-container">
-          <input type="text" class="input" name="name" placeholder="Full Name">
-          <input type="number" class="input" name="age" placeholder="Age">
-          <input type="number" class="input" name="phone" placeholder="Phone Number">
-          <input type="text" class="input" name="location" placeholder="City">
-          <label for="">Gender : </label>
-              <input type="radio" id="male" name="gender" value="Male">
-              <label for="male">Male</label>
-              <input type="radio" id="female" name="female" value="Female">
-              <label for="female">Female</label>
-        </div>
-        <button type="submit">Save</button>
+      <span class="title">Add Your Profile</span>
+      <span class="subtitle">So that Companies can know you better!</span>
+      <div class="form-container">
+        <input type="text" class="input" name="name" placeholder="Full Name" />
+        <input type="number" class="input" name="age" placeholder="Age" />
+        <input type="number" class="input" name="phone" placeholder="Phone Number" />
+        <input type="text" class="input" name="location" placeholder="City" />
+        <label for="">Gender : </label>
+          <input type="radio" id="male" name="gender" value="Male" />   <label for="male">Male</label>   <input type="radio" id="female" name="female" value="Female" />   <label for="female">Female</label>
+      </div>
+      <button type="submit">Save</button>
     </form>
-</div>
+  </div>
+</body>

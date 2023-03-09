@@ -15,7 +15,13 @@ module.exports = (sequelize, DataTypes) => {
       UserJob.belongsTo(models.User)
     }
 
-    static appliedDate(){}
+    static findUserId(userId){
+      return UserJob.findAll({
+        where: {
+            UserId: userId
+        }
+    })
+    }
   }
   UserJob.init({
     JobId: DataTypes.INTEGER,

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>List Job</title>
+    <link rel="stylesheet" href="../css/style/listJob.css" />
+    <style>
+      .descripsi {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+      <div class="container">  
+          <a href="javascript:;" class="btn btn-sm  bg-gradient-dark mb-0 me-auto d-lg-none d-block">Sign IN</a>
+          <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon mt-2">
+                  <span class="navbar-toggler-bar bar1"></span>
+                  <span class="navbar-toggler-bar bar2"></span>
+                  <span class="navbar-toggler-bar bar3"></span>
+              </span>
+          </button>
+          <div class="collapse navbar-collapse w-100 pt-3 pb-2 py-lg-0" id="navigation">
+              <ul class="navbar-nav navbar-nav-hover">
+                  <li class="nav-item mx-2">
+                      <a class="nav-link ps-2 d-flex justify-content-between text-dark cursor-pointer align-items-center" role="button">
+                          Pages
+                      </a>
+                  </li>
+                  <li class="nav-item dropdown mx-2">
+                          <a class="nav-link ps-2 d-flex justify-content-between text-dark cursor-pointer align-items-center" role="button" href="/profile/add">
+                              Add Profile
+                          </a>
+                  </li>
+                  <li class="nav-item dropdown mx-2">
+                      <a class="nav-link ps-2 d-flex justify-content-between text-dark cursor-pointer align-items-center" role="button" href="/profile/">
+                              Profile
+                      </a>
+              </li>
+          </div>
+      </div>
+  </nav>
+    <%- include('partial/navbar'); %>
+    <table border="1">
+      <tr>
+        <th>Title</th>
+        <th>Company</th>
+        <th>Location</th>
+        <th>Requirement</th>
+        <th>Created Date</th>
+      </tr>
+      <% data.forEach(el => { %>
+      <tr>
+        <td><%=el.title%></td>
+        <td><%=el.companyName %></td>
+        <td><%=el.location%></td>
+        <td><%=el.requirement %></td>
+        <td><%=el.createdAt %></td>
+      </tr>
+      <% }) %>
+    </table>
+
+    <div style="display: flex">
+      <div>
+        <ul>
+          <% data.forEach((el,i,data) => { %>
+          <div>
+            <li>
+              <div class="card">
+                <div class="content">
+                  <a href="#">
+                    <span class="title"><%=el.title %></span>
+                  </a>
+                  <p class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae dolores, possimus pariatur animi temporibus nesciunt praesentium</p>
+                  <button onclick="showDescription(<%=i%>)">
+                    Find out more
+                    <span aria-hidden="true"> → </span>
+                  </button>
+                </div>
+              </div>
+            </li>
+          </div>
+          <% }) %>
+        </ul>
+      </div>
+      <div class="description">
+        <% data.forEach(el => { %>
+        <div class="descripsi">
+          <h1><%=el.title %></h1>
+          <h4>PT. <%=el.companyName %></h4>
+          <h4>PT. <%=el.requirement %></h4>
+          <% const find = dataUserJob.find((el2) => el2.JobId === el.id)  %>
+            <% if (find) { %>
+                <p>you have already applied to this job</p>
+                <% } else { %>
+                    <form action="/jobs/<%= el.id %>/apply" method="post">
+                        <button type="submit">Apply</button>
+                    </form>
+               <% }%>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  </body>
+  <script>
+    function showDescription(index, data) {
+      const descripsi = document.getElementsByClassName('descripsi');
+      for (let i = 0; i < descripsi.length; i++) {
+        if (i !== index) {
+          descripsi[i].style.display = 'none';
+        }
+      }
+
+      descripsi[index].style.display = 'block';
+    }
+  </script>
+</html>
+

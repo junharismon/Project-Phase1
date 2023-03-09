@@ -18,10 +18,33 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   User.init({
-    username: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    role: DataTypes.STRING
+    username: {
+      type : DataTypes.STRING,
+      allowNull : false,
+      validate: {
+        notEmpty : {msg : 'username cannot be empty'},
+        notNull : {msg : 'please insert your username'}
+      }
+    },
+    email: {
+      type : DataTypes.STRING,
+      allowNull : false,
+      validate: {
+        notEmpty : {msg : 'email cannot be empty'},
+        notNull : {msg : 'please insert your email'},
+        isEmail : {msg : 'wrong email format'}
+      }
+    },
+    password: {
+      type : DataTypes.STRING,
+      allowNull : false,
+      validate: {
+        notEmpty : {msg : 'password cannot be empty'},
+        notNull : {msg : 'please insert your password'}
+      }
+    },
+    role: DataTypes.STRING,
+    hasProfile: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'User',
@@ -31,6 +54,7 @@ module.exports = (sequelize, DataTypes) => {
     var hash = bcrypt.hashSync(user.password, salt);
     user.role = 'user'
     user.password = hash
+    user.hasProfile = false
   });
   return User;
 };

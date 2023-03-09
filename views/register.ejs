@@ -1,16 +1,24 @@
-<link rel="stylesheet" href="../css/style/register.css">
-<div class="form-box">
+<link rel="stylesheet" href="../css/style/register.css" />
+<body style="background-color: rgba(0, 0, 0, 0.3)">
+  <div class="form-box" style="position: absolute; left: 40%; top: 5%">
     <form class="form" method="post" action="/register">
-        <span class="title">Sign up</span>
-        <span class="subtitle">Create a free account with your email.</span>
-        <div class="form-container">
-          <input type="text" class="input" name="username" placeholder="Full Name">
-                <input type="email" class="input" name="email" placeholder="Email">
-                <input type="password" class="input" placeholder="Password" name="password">
-        </div>
-        <button type="submit">Sign up</button>
+      <span class="title">Sign up</span>
+      <span class="subtitle">Create a free account with your email.</span>
+      <% if (errors) { %>
+        <% const arrErr = errors.split(",") %>
+        <% arrErr.forEach(el => { %>
+          <p style="color: red;"><%= el %></p>
+        <% }) %>
+      <% } %>
+      <div class="form-container">
+        <input type="text" class="input" name="username" placeholder="Full Name" />
+        <input type="email" class="input" name="email" placeholder="Email" />
+        <input type="password" class="input" placeholder="Password" name="password" />
+      </div>
+      <button type="submit">Sign up</button>
     </form>
     <div class="form-section">
-      <p>Have an account? <a href="">Log in</a> </p>
+      <p>Have an account? <a href="">Log in</a></p>
     </div>
-</div>
+  </div>
+</body>

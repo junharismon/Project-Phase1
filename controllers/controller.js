@@ -1,6 +1,7 @@
 const { Job, User, Profile, UserJob } = require('../models/index')
 const bcrypt = require('bcryptjs');
 const { Op } = require("sequelize");
+const nodeMailer = require('../helpers/nodeMailer');
 
 class Controller {
     static home(req, res) {
@@ -10,6 +11,13 @@ class Controller {
     static job(req, res) {
         const { title, location, category } = req.query
         let options = {}
+          if (title) {
+            options = { 
+                where: { title :{ [Op.iLike]: `%${title}%` }}
+            }
+            console.log(options)
+          }
+          
         if (title, location, category) {
             options = {
                 where: {
@@ -92,19 +100,23 @@ class Controller {
             }
         }
         let dataJob;
+        let dataUserJob;
         Job
             .findAll(options)
             .then((data) => {
                 dataJob = data
                 const userId = req.session.UserId
-                return UserJob.findAll({
-                    where: {
-                        UserId: userId
-                    }
+                return UserJob.findUserId(userId)
+            })
+            .then((data2) => {
+                dataUserJob = data2
+                const userId = req.session.UserId
+                return User.findOne({
+                    where: { id : userId}
                 })
             })
-            .then((dataUserJob) => {
-                res.render('job', { data: dataJob, dataUserJob })
+            .then((dataUser) => {
+                res.render('job', { data: dataJob, dataUserJob, dataUser })
             })
             .catch((err) => {
                 res.send(err)
@@ -140,27 +152,40 @@ class Controller {
     }
 
     static register(req, res) {
-        res.render('register')
+        const { errors } = req.query
+        res.render('register', { errors })
     }
 
     static registerHandler(req, res) {
         const { username, email, password } = req.body
         User.create({ username, email, password })
             .then(() => {
+                nodeMailer(email)
                 res.redirect('/login')
             })
             .catch((err) => {
-                res.send(err)
+                if (err.name === 'SequelizeValidationError') {
+                    let errors = err.errors.map((el) => {
+                        return el.message
+                    })
+                    res.redirect(`/register?errors=${errors}`)
+                } else {
+                    res.send(err)
+                }
             })
     }
     static getProfile(req, res) {
         const { id } = req.params
-        Profile.findByPk(id)
-            .then((data) => {
-                res.render('profile', { data })
+        Profile.findOne({
+            where: {
+                UserId: id
+            }
+        })
+        .then((data) => {
+            res.render('profile', { data })
             })
             .catch((err) => {
-                res.send(data)
+                res.send(err)
             })
     }
 
@@ -184,6 +209,9 @@ class Controller {
         Profile.create({ name, gender, age, phone, location, UserId: req.session.UserId }, {
             where: { id }
         })
+            .then(() => {
+                User.update({ hasProfile: true }, { where: { id: req.session.UserId } })
+            })
             .then(() => {
                 res.redirect(`/`)
             })
@@ -211,7 +239,7 @@ class Controller {
                 JobId: id
             }
         })
-            .then((data) => {
+            .then(() => {
                 UserJob.create({ JobId: id, UserId: req.session.UserId })
                 res.redirect('/jobs')
             })
@@ -229,6 +257,17 @@ class Controller {
             else {
                 res.redirect('/')
             }
+        })
+    }
+    static delete(req, res){
+        const { id } = req.params
+        console.log(id)
+        Profile.destroy({where : { id }})
+        .then(() => {
+            res.redirect('/')
+        })
+        .catch((err) => {
+            res.send(err)
         })
     }
 }
