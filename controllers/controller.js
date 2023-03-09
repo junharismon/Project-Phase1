@@ -11,13 +11,13 @@ class Controller {
     static job(req, res) {
         const { title, location, category } = req.query
         let options = {}
-          if (title) {
-            options = { 
-                where: { title :{ [Op.iLike]: `%${title}%` }}
+        if (title) {
+            options = {
+                where: { title: { [Op.iLike]: `%${title}%` } }
             }
             console.log(options)
-          }
-          
+        }
+
         if (title, location, category) {
             options = {
                 where: {
@@ -112,7 +112,7 @@ class Controller {
                 dataUserJob = data2
                 const userId = req.session.UserId
                 return User.findOne({
-                    where: { id : userId}
+                    where: { id: userId }
                 })
             })
             .then((dataUser) => {
@@ -169,6 +169,11 @@ class Controller {
                         return el.message
                     })
                     res.redirect(`/register?errors=${errors}`)
+                } else if (err.name === 'SequelizeUniqueConstraintError') {
+                    let errors = err.errors.map((el) => {
+                        return el.message
+                    })
+                    res.redirect(`/register?errors=${errors}`)
                 } else {
                     res.send(err)
                 }
@@ -181,8 +186,8 @@ class Controller {
                 UserId: id
             }
         })
-        .then((data) => {
-            res.render('profile', { data })
+            .then((data) => {
+                res.render('profile', { data })
             })
             .catch((err) => {
                 res.send(err)
@@ -259,16 +264,16 @@ class Controller {
             }
         })
     }
-    static delete(req, res){
+    static delete(req, res) {
         const { id } = req.params
         console.log(id)
-        Profile.destroy({where : { id }})
-        .then(() => {
-            res.redirect('/')
-        })
-        .catch((err) => {
-            res.send(err)
-        })
+        Profile.destroy({ where: { id } })
+            .then(() => {
+                res.redirect('/')
+            })
+            .catch((err) => {
+                res.send(err)
+            })
     }
 }
 

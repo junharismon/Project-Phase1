@@ -4,12 +4,9 @@
     <form class="form" method="post" action="/register">
       <span class="title">Sign up</span>
       <span class="subtitle">Create a free account with your email.</span>
-      <% if (errors) { %>
-        <% const arrErr = errors.split(",") %>
-        <% arrErr.forEach(el => { %>
-          <p style="color: red;"><%= el %></p>
-        <% }) %>
-      <% } %>
+      <% if (errors) { %> <% const arrErr = errors.split(",") %> <% arrErr.forEach(el => { %>
+      <p style="color: red"><%= el %></p>
+      <% }) %> <% } %>
       <div class="form-container">
         <input type="text" class="input" name="username" placeholder="Full Name" />
         <input type="email" class="input" name="email" placeholder="Email" />
@@ -18,7 +15,7 @@
       <button type="submit">Sign up</button>
     </form>
     <div class="form-section">
-      <p>Have an account? <a href="">Log in</a></p>
+      <p>Have an account? <a href="/login">Log in</a></p>
     </div>
   </div>
 </body>
