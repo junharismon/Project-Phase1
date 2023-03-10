@@ -124,8 +124,12 @@ class Controller {
     }
 
     static login(req, res) {
-        const { error } = req.query
-        res.render('login', { error })
+        if(req.session.UserId){
+            res.redirect('/')
+        } else{
+            const { error } = req.query
+            res.render('login', { error })
+        }
     }
 
     static loginHandler(req, res) {
@@ -169,7 +173,13 @@ class Controller {
                         return el.message
                     })
                     res.redirect(`/register?errors=${errors}`)
-                } else {
+                } else if (err.name === 'SequelizeUniqueConstraintError') {
+                    let errors = err.errors.map((el) => {
+                        return el.message
+                    })
+                    res.redirect(`/register?errors=${errors}`)
+                }
+                else {
                     res.send(err)
                 }
             })
@@ -190,13 +200,14 @@ class Controller {
     }
 
     static addProfileRender(req, res) {
+        const { errors } = req.query
         User.findOne({
             where: {
                 id: req.session.UserId
             }
         })
             .then((data) => {
-                res.render('addProfile', { data })
+                res.render('addProfile', { data, errors })
             })
             .catch((err) => {
                 res.send(err)
@@ -216,7 +227,14 @@ class Controller {
                 res.redirect(`/`)
             })
             .catch((err) => {
-                res.send(err)
+                if (err.name === 'SequelizeValidationError') {
+                    let errors = err.errors.map((el) => {
+                        return el.message
+                    })
+                    res.redirect(`/profile/add?errors=${errors}`)
+                } else {
+                    res.send(err)
+                }
             })
     }
 
@@ -261,9 +279,11 @@ class Controller {
     }
     static delete(req, res){
         const { id } = req.params
-        console.log(id)
         Profile.destroy({where : { id }})
         .then(() => {
+            User.update({hasProfile : false}, {where: { id : req.session.UserId }})
+        })
+        .then(()=>{
             res.redirect('/')
         })
         .catch((err) => {

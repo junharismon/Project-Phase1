@@ -4,6 +4,12 @@
     <form class="form" method="post" action="/profile/add/<%= data.id %>">
       <span class="title">Add Your Profile</span>
       <span class="subtitle">So that Companies can know you better!</span>
+      <% if (errors) { %>
+        <% const arrErr = errors.split(",") %>
+        <% arrErr.forEach(el => { %>
+          <p style="color: red;"><%= el %></p>
+        <% }) %>
+      <% } %>
       <div class="form-container">
         <input type="text" class="input" name="name" placeholder="Full Name" />
         <input type="number" class="input" name="age" placeholder="Age" />
